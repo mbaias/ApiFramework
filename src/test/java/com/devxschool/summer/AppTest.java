@@ -107,4 +107,5 @@ public class AppTest {
         Assert.assertEquals(200, response.getStatusCode());
         Assert.assertEquals("{}", response.asString());
     }
+
 }
