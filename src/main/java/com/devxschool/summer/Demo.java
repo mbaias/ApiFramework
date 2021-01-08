@@ -3,10 +3,13 @@ package com.devxschool.summer;
 import com.devxschool.summer.pojo.Employee;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import org.junit.Test;
 
+import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class Demo {
     @Test
@@ -32,6 +35,13 @@ public class Demo {
         System.out.println(employee.getPosition());
         System.out.println(employee.getSalary());
         System.out.println(employee.getStatus());
+
+
+        // Deserialize json string to Map
+        Type type = new TypeToken<Map<String, String>>(){}.getType();
+        Map<String, String> employeeMap = gson.fromJson(employeeJson, type);
+        System.out.println(employeeMap);
+
 
 
         String employeeJson2 = "{\n" +

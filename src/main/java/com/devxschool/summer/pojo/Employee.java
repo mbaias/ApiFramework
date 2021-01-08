@@ -1,7 +1,6 @@
 package com.devxschool.summer.pojo;
 
 import java.util.List;
-import java.util.Map;
 
 public class Employee {
     private String firstName;
