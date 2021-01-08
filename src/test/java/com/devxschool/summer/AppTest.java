@@ -2,6 +2,8 @@ package com.devxschool.summer;
 
 import static io.restassured.RestAssured.*;
 
+import com.devxschool.summer.pojo.User;
+import com.google.gson.Gson;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -59,15 +61,17 @@ public class AppTest {
     @Test
     public void getUserDetailsById_3() {
         Response response = given()
-            .pathParam("userId", "4")
-            .when().request("GET", "/users/{userId}");
+                .pathParam("userId", "4")
+                .when().request("GET", "/users/{userId}");
 
-        int id = response.body().jsonPath().getInt("id");
-        String latitude = response.body().jsonPath().getString("address.geo.lat");
+        Gson gson = new Gson();
 
-        Assert.assertEquals(200, response.getStatusCode());
-        Assert.assertEquals(4, id);
-        Assert.assertEquals("29.4572", latitude);
+        User user = gson.fromJson(response.body().asString(), User.class);
+
+        Assert.assertEquals(4, user.getId());
+        Assert.assertEquals("Patricia Lebsack", user.getName());
+        Assert.assertEquals("Karianne", user.getUsername());
+        Assert.assertEquals("Julianne.OConner@kory.org", user.getEmail());
     }
 
     @Test
@@ -84,13 +88,17 @@ public class AppTest {
 
     @Test
     public void createUser_1() {
+        User user = new User();
+        user.setName("baiastan");
+        user.setUsername("mbaias");
+        user.setEmail("afnvld@gmail.com");
+
+        Gson gson = new Gson();
+        String userJson = gson.toJson(user);
+
         Response response = given()
                 .contentType(ContentType.JSON)
-                .body("{\n" +
-                        "    \"name\": \"baiastan\",\n" +
-                        "    \"username\": \"mbaias\",\n" +
-                        "    \"email\": \"afnvld@gmail.com\"\n" +
-                        "}")
+                .body(userJson)
                 .when().request("POST", "/users");
 
         Assert.assertEquals(201, response.getStatusCode());
